@@ -1,7 +1,160 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
-  margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #1B1B1B;
+  overflow: hidden;
+  height: 100vh;
+  padding: 0px;
+  margin: 0px;
+}
+
+div {
+  padding: 0px;
+  margin: 0px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.733); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.centered-container {
+  background: #313131;
+  padding: 20px;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  display: grid;
+  width: 50%;
+  grid-gap: 5px;
+}
+
+.base-grid {
+  display: grid;
+  height: 100%;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+.frame-grid {
+  position: relative;
+  display: flex;
+  align-items: center;
+  -webkit-app-region: drag;
+  background-color: #2B2B2B;
+  padding: 5px 10px;
+}
+
+.frame-button-container {
+  position: absolute;
+  right: 10px;
+}
+
+.frame-button-container button {
+  -webkit-app-region: no-drag;
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  padding: 0px;
+  margin: 0px;
+  color: #ececec;
+}
+
+.container {
+  background-color: #313131;
+  border-radius: 3px;
+  text-align: center;
+  padding: 5px 10px;
+  display: grid;
+  grid-gap: 5px;
+}
+
+.list-container {
+  display: grid;
+  grid-gap: 5px;
+  align-content: start;
+  overflow: auto;
+  border-radius: 3px;
+}
+
+button {
+  background-color: #414141;
+  border-style: none;
+  color: rgb(238, 238, 238);
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #252525
+}
+
+button.disable {
+  background-color: transparent;
+  color: rgb(100, 100, 100);
+}
+
+button.disable:hover{
+  pointer-events: none;
+}
+
+button.update {
+  background-color: green;
+}
+
+button.update:hover {
+  background-color: rgb(53, 145, 53);
+}
+
+p {
+  color: rgb(238, 238, 238);
+  padding: 0px;
+  margin: 0px;
+}
+
+.app-content-grid {
+  display: grid;
+  background-color: #1B1B1B;
+  grid-template-columns: 2fr 3fr;
+  grid-gap: 7px;
+  margin: 7px;
+  overflow: hidden;
+}
+
+.nav-button {
+  background-color: transparent;
+  border-radius: 0px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  font-size: 14px;
+}
+
+.nav-button.active {
+  background-color: #313131;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color: var(--scrollbar-color);
+  -webkit-box-shadow: inset 0 0 6px #9593D9;
+  cursor:pointer;
 }

@@ -2,11 +2,29 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
+    <title>Screen Sentry</title>
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <div id="overlayContainer" class="overlay" style="display: none;">
+    </div>
+
+    <div class="base-grid">
+      <div class="frame-grid">
+        <h4 style="color: white; padding: 5px 0px; margin: auto 10px;">Screen Sentry</h4>
+        <div class="frame-button-container">
+          <button id="minimizeButton" class="fa fa-window-minimize"></button>
+          <button id="maximizeButton" class="fa fa-window-maximize"></button>
+          <button id="exitButton" class="fa-solid fa-power-off"></button>  
+        </div>
+      </div>
+
+      <div class="app-content-grid">
+      </div>
+
+    </div>
   </body>
+  <script src="frame.js"></script>
 </html>
