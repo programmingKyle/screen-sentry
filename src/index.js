@@ -1,7 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, screen } = require('electron');
 const path = require('node:path');
 
 let mainWindow;
+let selectionWindow;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -75,5 +76,53 @@ function toggleMaximize(){
   maximized = !maximized;
 }
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+
+//
+//
+let selectionWindows = [];
+
+function createSelectionWindows() {
+  const displays = screen.getAllDisplays();
+
+  displays.forEach(display => {
+    const { x, y, width, height } = display.bounds;
+
+    let selectionWindow = new BrowserWindow({
+      x,
+      y,
+      width,
+      height,
+      transparent: true,
+      frame: false,
+      alwaysOnTop: true,
+      webPreferences: {
+          nodeIntegration: true,
+          preload: path.join(__dirname, 'preload.js')
+      }
+    });
+
+    selectionWindow.loadFile(path.join(__dirname, 'selection.html'));
+
+    selectionWindow.webContents.on('did-finish-load', () => {
+      selectionWindow.webContents.send('window-size', { width, height });
+    });
+
+    selectionWindow.on('closed', () => {
+      selectionWindow = null;
+    });
+
+    selectionWindows.push(selectionWindow);
+  });
+}
+
+
+ipcMain.handle('open-window-selection', () => {
+  createSelectionWindows();
+});
+
+ipcMain.handle('window-selection', (req, data) => {
+  console.log(data);
+  selectionWindows.forEach(element => {
+    element.close();
+  });
+});
