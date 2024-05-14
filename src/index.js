@@ -117,14 +117,29 @@ function createSelectionWindows() {
   });
 }
 
-
-ipcMain.handle('open-window-selection', () => {
-  createSelectionWindows();
+ipcMain.handle('window-select-handler', (req, data) => {
+  if (!data || !data.request) return;
+  switch(data.request){
+    case 'openSelection':
+      createSelectionWindows();
+      break;
+    case 'select':
+      windowSelection(data.selection);
+      break;
+    case 'close':
+      closeWindowSelection();
+  }
 });
 
-ipcMain.handle('window-selection', (req, data) => {
-  console.log(data);
+function windowSelection(selection){
+  console.log(selection);
   selectionWindows.forEach(element => {
     element.close();
   });
-});
+}
+
+function closeWindowSelection(){
+  selectionWindows.forEach(element => {
+    element.close();
+  });
+}

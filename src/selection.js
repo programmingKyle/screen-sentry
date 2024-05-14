@@ -21,6 +21,12 @@ window.addEventListener('mouseup', e => {
         isValid = false;
     }
     if (isValid){
-        api.windowSelection({selection: selection});
+        api.windowSelectHandler({request: 'select', selection: selection});
     }
 });
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape'){
+        api.windowSelectHandler({request: 'close'});
+    }
+})
