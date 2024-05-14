@@ -19,6 +19,7 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             pointer-events: none;
+            mix-blend-mode: difference;
         }
 
         h2 {
@@ -32,9 +33,18 @@
             padding: 0;
             margin: 0;
         }
+
+        #selectionBox {
+            position: fixed;
+            border: 2px dotted #ffffff;
+            background-color: transparent;
+            pointer-events: none; /* To prevent the box from interfering with mouse events */
+            z-index: 9999; /* To ensure the box appears on top of other elements */
+        }
     </style>
 </head>
 <body>
+    <div id="selectionBox"></div>
     <div id="overlay"></div>
     <h2>"Escape" to return</h2>
     <script src="selection.js"></script>
