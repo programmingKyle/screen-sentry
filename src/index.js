@@ -136,10 +136,12 @@ function windowSelection(selection){
   selectionWindows.forEach(element => {
     element.close();
   });
+  selectionWindows.length = 0;
 }
 
 function closeWindowSelection(){
   selectionWindows.forEach(element => {
     element.close();
   });
+  selectionWindows.length = 0;
 }
