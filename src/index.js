@@ -92,6 +92,8 @@ function createSelectionWindows() {
       y,
       width,
       height,
+      resizable: false,
+      alwaysOnTop: true,
       transparent: true,
       frame: false,
       alwaysOnTop: true,
