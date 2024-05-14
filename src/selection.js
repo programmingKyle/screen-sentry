@@ -6,6 +6,7 @@ window.addEventListener('mousedown', e => {
 });
 
 window.addEventListener('mouseup', e => {
+    let isValid = true;
     const endX = e.screenX;
     const endY = e.screenY;
     const width = Math.abs(endX - startX);
@@ -16,5 +17,10 @@ window.addEventListener('mouseup', e => {
         width,
         height
     };
-    api.windowSelection({selection: selection});
+    if (selection.width === 0 || selection.height === 0){
+        isValid = false;
+    }
+    if (isValid){
+        api.windowSelection({selection: selection});
+    }
 });
