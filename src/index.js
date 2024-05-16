@@ -102,6 +102,7 @@ function createSelectionWindows() {
       transparent: true,
       frame: false,
       alwaysOnTop: true,
+      maximize: true,
       webPreferences: {
         nodeIntegration: true,
         preload: path.join(__dirname, 'preload.js')
@@ -117,6 +118,8 @@ function createSelectionWindows() {
     selectionWindow.on('closed', () => {
       selectionWindow = null;
     });
+
+    selectionWindow.setFullScreen(true);
 
     selectionWindows.push(selectionWindow);
   });
