@@ -160,16 +160,19 @@ function closeWindowSelection(){
 
 function captureScreenshot(region, display) {
   const { width, height } = display.size;
+  const { x, y, width: cropWidth, height: cropHeight } = region;
 
   desktopCapturer.getSources({ types: ['screen'], thumbnailSize: {width, height} })
         .then(sources => {
           const source = sources.find(s => s.display_id === display.id.toString());
 
           if (source) {
-              console.log('Capturing screenshot of display:', display.id);
-              const pngData = source.thumbnail.toPNG();
-              const filePath = path.join(appDataPath, 'screenshot.png');
-              fs.writeFile(filePath, pngData, err => {
+              const image = nativeImage.createFromBuffer(source.thumbnail.toPNG());
+              const { x, y, width: cropWidth, height: cropHeight } = region;
+              const croppedImage = image.crop({ x, y, width: cropWidth, height: cropHeight });
+
+              const pngData = croppedImage.toPNG();
+              const filePath = path.join(appDataPath, 'screenshot.png');              fs.writeFile(filePath, pngData, err => {
                   if (err) {
                       console.error('Failed to save screenshot:', err);
                   } else {
