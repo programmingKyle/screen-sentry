@@ -133,13 +133,18 @@ ipcMain.handle('window-select-handler', (req, data) => {
       break;
     case 'close':
       closeWindowSelection();
+      break;
+    case 'stop':
+      stopMonitoring();
+      break;
   }
 });
 
 let region;
+let monitorInterval;
 
 function windowSelection(selection){
-  console.log(selection);
+  mainWindow.webContents.send('set-monitoring', 'Monitoring');
   selectionWindows.forEach(element => {
     element.close();
   });
@@ -200,7 +205,7 @@ function compareImages(img1, img2) {
 function monitorScreen(region, display) {
   let previousImg = null;
 
-  const interval = setInterval(() => {
+  monitorInterval = setInterval(() => {
     captureScreenshot(region, display)
       .then(currentImg => {
         if (previousImg) {
@@ -217,4 +222,10 @@ function monitorScreen(region, display) {
         console.error('Error capturing current screenshot:', error);
       });
   }, 2000);
+}
+
+function stopMonitoring(){
+  if (monitorInterval){
+    clearInterval(monitorInterval);
+  }
 }
