@@ -147,8 +147,7 @@ function windowSelection(selection){
   region = selection;
 
   const selectedDisplay = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
-  captureScreenshot(region, selectedDisplay);
-  //monitorScreen(region);
+  monitorScreen(region, selectedDisplay);
 }
 
 function closeWindowSelection(){
@@ -160,73 +159,62 @@ function closeWindowSelection(){
 
 function captureScreenshot(region, display) {
   const { width, height } = display.size;
-  const { x, y, width: cropWidth, height: cropHeight } = region;
 
-  desktopCapturer.getSources({ types: ['screen'], thumbnailSize: {width, height} })
-        .then(sources => {
-          const source = sources.find(s => s.display_id === display.id.toString());
+  return new Promise((resolve, reject) => {
+    desktopCapturer.getSources({ types: ['screen'], thumbnailSize: { width, height } })
+      .then(sources => {
+        const source = sources.find(s => s.display_id === display.id.toString());
 
-          if (source) {
-              const image = nativeImage.createFromBuffer(source.thumbnail.toPNG());
-              const { x, y, width: cropWidth, height: cropHeight } = region;
-              const croppedImage = image.crop({ x, y, width: cropWidth, height: cropHeight });
+        if (source) {
+          const image = nativeImage.createFromBuffer(source.thumbnail.toPNG());
+          const { x, y, width: cropWidth, height: cropHeight } = region;
+          const croppedImage = image.crop({ x, y, width: cropWidth, height: cropHeight });
 
-              const pngData = croppedImage.toPNG();
-              const filePath = path.join(appDataPath, 'screenshot.png');              fs.writeFile(filePath, pngData, err => {
-                  if (err) {
-                      console.error('Failed to save screenshot:', err);
-                  } else {
-                      console.log('Screenshot saved successfully:', filePath);
-                  }
-              });
-          } else {
-              console.error('Failed to find source for display:', display.id);
-          }
+          const pngData = croppedImage.toPNG();
+          resolve(pngData);
+        } else {
+          reject(new Error('Failed to find source for display: ' + display.id));
+        }
       })
       .catch(error => {
-          console.error('Error getting screen sources:', error);
+        reject(new Error('Error getting screen sources: ' + error));
       });
+  });
 }
 
 function compareImages(img1, img2) {
-  const diff = new PNG({ width: img1.width, height: img1.height });
+  const img1Image = nativeImage.createFromBuffer(img1);
+  const img2Image = nativeImage.createFromBuffer(img2);
+
+  const diff = new PNG({ width: img1Image.getSize().width, height: img1Image.getSize().height });
 
   const mismatchedPixels = pixelmatch(
-    img1.data, img2.data, diff.data,
-    img1.width, img1.height,
-    { threshold: 0.1 }
+    img1Image.toBitmap(), img2Image.toBitmap(), diff.data,
+    img1Image.getSize().width, img1Image.getSize().height,
+    { threshold: 0.3 }
   );
 
   return mismatchedPixels;
 }
 
-function monitorScreen(region) {
-  const interval = setInterval(() => {
-    captureScreenshot(region)
-      .then(previousImg => {
-        setTimeout(() => {
-          captureScreenshot(region)
-            .then(currentImg => {
-              const mismatchedPixels = compareImages(previousImg, currentImg);
+function monitorScreen(region, display) {
+  let previousImg = null;
 
-              if (mismatchedPixels > 0) {
-                console.log(`Change detected! ${mismatchedPixels} pixels changed.`);
-              } else {
-                console.log('No change detected.');
-              }
-            })
-            .catch(error => {
-              console.error('Error capturing current screenshot:', error);
-            });
-        }, 1000);
+  const interval = setInterval(() => {
+    captureScreenshot(region, display)
+      .then(currentImg => {
+        if (previousImg) {
+          const mismatchedPixels = compareImages(previousImg, currentImg);
+          if (mismatchedPixels > 0) {
+            console.log(`Change detected! ${mismatchedPixels} pixels changed.`);
+          } else {
+            console.log('No change detected.');
+          }
+        }
+        previousImg = currentImg;
       })
       .catch(error => {
-        console.error('Error capturing previous screenshot:', error);
+        console.error('Error capturing current screenshot:', error);
       });
-  }, 5000);
-
-  setTimeout(() => {
-    clearInterval(interval);
-    console.log('Monitoring stopped.');
-  }, 600000);
+  }, 2000);
 }
