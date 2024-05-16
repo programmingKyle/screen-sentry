@@ -11,7 +11,6 @@ window.addEventListener('mousedown', e => {
 
 window.addEventListener('mousemove', e => {
     if (!startX || !startY) return;
-    console.log(selectionBox_el);
     selectionBox_el.style.display = 'block';
     const endX = e.screenX;
     const endY = e.screenY;
@@ -32,17 +31,23 @@ window.addEventListener('mouseup', e => {
     const endY = e.screenY;
     const width = Math.abs(endX - startX);
     const height = Math.abs(endY - startY);
+    
+    const screen = window.screen;
+    const availLeft = screen.availLeft;
+    const availTop = screen.availTop;
+
     const selection = {
-        x: Math.min(startX, endX),
-        y: Math.min(startY, endY),
+        x: Math.min(startX, endX) - availLeft,
+        y: Math.min(startY, endY) - availTop,
         width,
         height
     };
+
     startX = null;
     startY = null;
     selectionBox_el.style.display = 'none';
     if (selection.width === 0 || selection.height === 0) return;
-    api.windowSelectHandler({request: 'select', selection: selection});
+    api.windowSelectHandler({ request: 'select', selection: selection });
 });
 
 document.addEventListener('keydown', (event) => {
