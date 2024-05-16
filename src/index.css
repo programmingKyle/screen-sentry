@@ -99,11 +99,6 @@ button:hover {
   background-color: #252525
 }
 
-button.disable {
-  background-color: transparent;
-  color: rgb(100, 100, 100);
-}
-
 button.disable:hover{
   pointer-events: none;
 }
@@ -165,13 +160,4 @@ p {
 .monitor-button {
   border-radius: 5px;
   background-color: #1B1B1B;
-}
-
-.monitor-button:hover {
-  background-color: rgb(53, 145, 53);
-  cursor: pointer;
-}
-
-.monitor-button:active {
-  background-color: white;
 }

@@ -12,6 +12,23 @@ monitorButton_el.addEventListener('click', () => {
     }
 });
 
+monitorButton_el.addEventListener('mouseover', () => {
+    if (!isMonitoring){
+        monitorButton_el.style.backgroundColor = 'green';
+    } else {
+        monitorButton_el.style.backgroundColor = '#1B1B1B';
+    }
+});
+
+monitorButton_el.addEventListener('mouseleave', () => {
+    if (!isMonitoring){
+        monitorButton_el.style.backgroundColor = '#1B1B1B';
+    } else {
+        monitorButton_el.style.backgroundColor = 'green';
+    }
+});
+
+
 api.setMonitoring((status) => {
     if (status === 'Monitoring'){
         toggleMonitoring();
