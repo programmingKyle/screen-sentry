@@ -29,6 +29,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.1"
+    "electron-screenshot": "^1.0.5",
+    "electron-squirrel-startup": "^1.0.1",
+    "jimp": "^0.22.12",
+    "pixelmatch": "^5.3.0",
+    "pngjs": "^7.0.0"
   }
 }

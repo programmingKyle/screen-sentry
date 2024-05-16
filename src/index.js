@@ -1,5 +1,10 @@
-const { app, BrowserWindow, ipcMain, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, screen, desktopCapturer, nativeImage } = require('electron');
 const path = require('node:path');
+const appDataPath = app.getPath('userData');
+
+const fs = require('fs');
+const { PNG } = require('pngjs');
+const pixelmatch = require('pixelmatch');
 
 let mainWindow;
 let selectionWindow;
@@ -98,8 +103,8 @@ function createSelectionWindows() {
       frame: false,
       alwaysOnTop: true,
       webPreferences: {
-          nodeIntegration: true,
-          preload: path.join(__dirname, 'preload.js')
+        nodeIntegration: true,
+        preload: path.join(__dirname, 'preload.js')
       }
     });
 
@@ -131,12 +136,19 @@ ipcMain.handle('window-select-handler', (req, data) => {
   }
 });
 
+let region;
+
 function windowSelection(selection){
   console.log(selection);
   selectionWindows.forEach(element => {
     element.close();
   });
   selectionWindows.length = 0;
+  region = selection;
+
+  const selectedDisplay = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+  captureScreenshot(region, selectedDisplay);
+  //monitorScreen(region);
 }
 
 function closeWindowSelection(){
@@ -144,4 +156,74 @@ function closeWindowSelection(){
     element.close();
   });
   selectionWindows.length = 0;
+}
+
+function captureScreenshot(region, display) {
+  const { width, height } = display.size;
+
+  desktopCapturer.getSources({ types: ['screen'], thumbnailSize: {width, height} })
+        .then(sources => {
+          const source = sources.find(s => s.display_id === display.id.toString());
+
+          if (source) {
+              console.log('Capturing screenshot of display:', display.id);
+              const pngData = source.thumbnail.toPNG();
+              const filePath = path.join(appDataPath, 'screenshot.png');
+              fs.writeFile(filePath, pngData, err => {
+                  if (err) {
+                      console.error('Failed to save screenshot:', err);
+                  } else {
+                      console.log('Screenshot saved successfully:', filePath);
+                  }
+              });
+          } else {
+              console.error('Failed to find source for display:', display.id);
+          }
+      })
+      .catch(error => {
+          console.error('Error getting screen sources:', error);
+      });
+}
+
+function compareImages(img1, img2) {
+  const diff = new PNG({ width: img1.width, height: img1.height });
+
+  const mismatchedPixels = pixelmatch(
+    img1.data, img2.data, diff.data,
+    img1.width, img1.height,
+    { threshold: 0.1 }
+  );
+
+  return mismatchedPixels;
+}
+
+function monitorScreen(region) {
+  const interval = setInterval(() => {
+    captureScreenshot(region)
+      .then(previousImg => {
+        setTimeout(() => {
+          captureScreenshot(region)
+            .then(currentImg => {
+              const mismatchedPixels = compareImages(previousImg, currentImg);
+
+              if (mismatchedPixels > 0) {
+                console.log(`Change detected! ${mismatchedPixels} pixels changed.`);
+              } else {
+                console.log('No change detected.');
+              }
+            })
+            .catch(error => {
+              console.error('Error capturing current screenshot:', error);
+            });
+        }, 1000);
+      })
+      .catch(error => {
+        console.error('Error capturing previous screenshot:', error);
+      });
+  }, 5000);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    console.log('Monitoring stopped.');
+  }, 600000);
 }
