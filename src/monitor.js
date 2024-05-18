@@ -9,6 +9,16 @@ const notificationSound_el = document.getElementById('notificationSound');
 
 let isMonitoring = false;
 
+document.addEventListener('DOMContentLoaded', async () => {
+    const results = await api.getConfig();
+    loadSettings(results);
+});
+
+function loadSettings(settings){
+    console.log(settings);
+    thresholdSlider_el.value = settings.inputSettings.threshold * 100;
+}
+
 monitorButton_el.addEventListener('click', () => {
     if (!isMonitoring){
         controlDiv_el.style.display = 'none';

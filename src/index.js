@@ -116,12 +116,18 @@ function createSelectionWindows() {
   });
 }
 
+ipcMain.handle('get-config', async () => {
+  const settings = store.get();
+  const converted = Object.assign({}, settings);
+  return converted;
+});
+
 ipcMain.handle('window-select-handler', (req, data) => {
   if (!data || !data.request) return;
   switch(data.request){
     case 'openSelection':
       detectionThreshold = data.threshold;
-      store.set('detectionThreshold', {threshold: data.threshold});
+      store.set('inputSettings', {threshold: data.threshold});
       createSelectionWindows();
       break;
     case 'select':
