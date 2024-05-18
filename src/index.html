@@ -27,13 +27,19 @@
             <h1 id="monitorIcon" class="fas fa-eye"></h1>
             <h4 id="monitorButtonText">Start Monitor</h4>
           </div>
-          <div style="display: flex; flex-direction: column;">
-            <h5>Notification Volume</h5>
-            <input type="range" min="0" max="100" value="50" id="volumeSlider">
-          </div>
-          <div style="display: flex; flex-direction: row; justify-content: center;">
-            <input type="checkbox">
-            <h5>Always On Top</h5>
+          <div id="controlDiv">
+            <div style="display: flex; flex-direction: column;">
+              <h5>Threshold</h5>
+              <input id="thresholdSlider" type="range" min="0" max="100" value="50">
+            </div>
+            <div style="display: flex; flex-direction: column;">
+              <h5>Notification Volume</h5>
+              <input id="volumeSlider" type="range" min="0" max="100" value="50">
+            </div>
+            <div style="display: flex; flex-direction: row; justify-content: center;">
+              <input type="checkbox">
+              <h5>Always On Top</h5>
+            </div>  
           </div>
         </div>
       </div>
