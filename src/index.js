@@ -127,7 +127,7 @@ ipcMain.handle('window-select-handler', (req, data) => {
   switch(data.request){
     case 'openSelection':
       detectionThreshold = data.threshold;
-      store.set('inputSettings', {threshold: data.threshold});
+      store.set('inputSettings', {threshold: data.threshold, volume: data.volume});
       createSelectionWindows();
       break;
     case 'select':

@@ -17,12 +17,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 function loadSettings(settings){
     console.log(settings);
     thresholdSlider_el.value = settings.inputSettings.threshold * 100;
+    volumeSlider_el.value = settings.inputSettings.volume * 100;
 }
 
 monitorButton_el.addEventListener('click', () => {
     if (!isMonitoring){
         controlDiv_el.style.display = 'none';
-        api.windowSelectHandler({request: 'openSelection', threshold: `${thresholdSlider_el.value / 100}`});
+        api.windowSelectHandler({request: 'openSelection', threshold: `${thresholdSlider_el.value / 100}`, volume: volumeSlider_el.value / 100});
     } else {
         controlDiv_el.style.display = 'block';
         toggleMonitoring();
