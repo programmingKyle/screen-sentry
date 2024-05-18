@@ -8,6 +8,7 @@ const pixelmatch = require('pixelmatch');
 
 let mainWindow;
 let selectionWindow;
+let detectionThreshold;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -129,6 +130,8 @@ ipcMain.handle('window-select-handler', (req, data) => {
   if (!data || !data.request) return;
   switch(data.request){
     case 'openSelection':
+      detectionThreshold = data.threshold;
+      console.log(detectionThreshold);
       createSelectionWindows();
       break;
     case 'select':
@@ -195,11 +198,10 @@ function compareImages(img1, img2) {
   const img2Image = nativeImage.createFromBuffer(img2);
 
   const diff = new PNG({ width: img1Image.getSize().width, height: img1Image.getSize().height });
-
   const mismatchedPixels = pixelmatch(
     img1Image.toBitmap(), img2Image.toBitmap(), diff.data,
     img1Image.getSize().width, img1Image.getSize().height,
-    { threshold: 0.3 }
+    { threshold: detectionThreshold }
   );
 
   return mismatchedPixels;

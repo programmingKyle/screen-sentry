@@ -2,11 +2,14 @@ const monitorButton_el = document.getElementById('monitorButton');
 const monitorIcon_el = document.getElementById('monitorIcon');
 const monitorButtonText_el = document.getElementById('monitorButtonText');
 
+const controlDiv_el = document.getElementById('controlDiv');
+const thresholdSlider_el = document.getElementById('thresholdSlider');
+
 let isMonitoring = false;
 
 monitorButton_el.addEventListener('click', () => {
     if (!isMonitoring){
-        api.windowSelectHandler({request: 'openSelection'});
+        api.windowSelectHandler({request: 'openSelection', threshold: `${thresholdSlider_el.value / 100}`});
     } else {
         toggleMonitoring();
     }

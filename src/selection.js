@@ -1,5 +1,6 @@
 const selectionBox_el = document.getElementById('selectionBox');
 const overlay_el = document.getElementById('overlay');
+
 let startX, startY;
 
 window.addEventListener('mousedown', e => {
