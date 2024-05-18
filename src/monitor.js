@@ -35,7 +35,6 @@ monitorButton_el.addEventListener('mouseleave', () => {
     }
 });
 
-
 api.monitoringHandler((status) => {
     switch (status){
         case 'Monitoring':
@@ -45,6 +44,7 @@ api.monitoringHandler((status) => {
             controlDiv_el.style.display = 'block';
             break;
         case 'Notify':
+            notificationSound_el.volume = volumeSlider_el.value / 100;
             notificationSound_el.play();
             break;
     }
