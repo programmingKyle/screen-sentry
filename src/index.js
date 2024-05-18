@@ -122,12 +122,27 @@ ipcMain.handle('get-config', async () => {
   return converted;
 });
 
+// Used for either adding or making edits to the config
+function alterConfigHandler(key, setting, value){
+  console.log(setting, value);
+  const config = store.get();
+  if (config){
+    const keyData = store.get(key, {});
+    keyData[setting] = value;
+    config[key] = keyData;
+    store.set(config);
+  } else {
+    store.set(key, { [setting]: value });
+  }
+}
+
 ipcMain.handle('window-select-handler', (req, data) => {
   if (!data || !data.request) return;
   switch(data.request){
     case 'openSelection':
       detectionThreshold = data.threshold;
-      store.set('inputSettings', {threshold: data.threshold, volume: data.volume});
+      alterConfigHandler('inputSettings', 'threshold', data.threshold);
+      alterConfigHandler('inputSettings', 'volume', data.volume);
       createSelectionWindows();
       break;
     case 'select':
