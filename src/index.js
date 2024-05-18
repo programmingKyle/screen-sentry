@@ -1,6 +1,8 @@
 const { app, BrowserWindow, ipcMain, screen, desktopCapturer, nativeImage } = require('electron');
 const path = require('node:path');
 const appDataPath = app.getPath('userData');
+const Store = require('electron-store');
+const store = new Store();
 
 const fs = require('fs');
 const { PNG } = require('pngjs');
@@ -18,7 +20,7 @@ if (require('electron-squirrel-startup')) {
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 300,
+    width: 300, 
     height: 300,
     maximizable: false,
     frame: false,
@@ -119,6 +121,7 @@ ipcMain.handle('window-select-handler', (req, data) => {
   switch(data.request){
     case 'openSelection':
       detectionThreshold = data.threshold;
+      store.set('detectionThreshold', {threshold: data.threshold});
       createSelectionWindows();
       break;
     case 'select':
