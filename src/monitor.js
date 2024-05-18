@@ -9,8 +9,10 @@ let isMonitoring = false;
 
 monitorButton_el.addEventListener('click', () => {
     if (!isMonitoring){
+        controlDiv_el.style.display = 'none';
         api.windowSelectHandler({request: 'openSelection', threshold: `${thresholdSlider_el.value / 100}`});
     } else {
+        controlDiv_el.style.display = 'block';
         toggleMonitoring();
     }
 });
@@ -35,6 +37,8 @@ monitorButton_el.addEventListener('mouseleave', () => {
 api.setMonitoring((status) => {
     if (status === 'Monitoring'){
         toggleMonitoring();
+    } else if (status === 'Close'){
+        controlDiv_el.style.display = 'block';
     }
 });
 

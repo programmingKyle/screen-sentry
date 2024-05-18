@@ -131,13 +131,13 @@ ipcMain.handle('window-select-handler', (req, data) => {
   switch(data.request){
     case 'openSelection':
       detectionThreshold = data.threshold;
-      console.log(detectionThreshold);
       createSelectionWindows();
       break;
     case 'select':
       windowSelection(data.selection);
       break;
     case 'close':
+      mainWindow.webContents.send('set-monitoring', 'Close');
       closeWindowSelection();
       break;
     case 'stop':
