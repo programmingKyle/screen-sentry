@@ -18,11 +18,15 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
+  const { width, height, x, y } = store.get('windowBounds', { width: 300, height: 300, x: 0, y: 0 });
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 300, 
-    height: 300,
+    width: width, 
+    height: height,
     maximizable: false,
+    x: x,
+    y: y,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -31,6 +35,17 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
+
+  mainWindow.on('resize', () => {
+    const { width: newWidth, height: newHeight } = mainWindow.getBounds();
+    store.set('windowBounds', { width: newWidth, height: newHeight, x: mainWindow.getPosition()[0], y: mainWindow.getPosition()[1], isMaximized: false });
+  });
+  
+  mainWindow.on('move', () => {
+    const [newX, newY] = mainWindow.getPosition();
+    store.set('windowBounds', { width, height, x: newX, y: newY, isMaximized: false });
+    frameMaximized = false;
+  });
 
   // Open the DevTools.
   //mainWindow.webContents.openDevTools();
@@ -124,7 +139,6 @@ ipcMain.handle('get-config', async () => {
 
 // Used for either adding or making edits to the config
 function alterConfigHandler(key, setting, value){
-  console.log(setting, value);
   const config = store.get();
   if (config){
     const keyData = store.get(key, {});

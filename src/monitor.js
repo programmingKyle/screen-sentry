@@ -15,10 +15,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function loadSettings(settings){
-    console.log(settings);
     thresholdSlider_el.value = settings.inputSettings.threshold * 100;
     volumeSlider_el.value = settings.inputSettings.volume * 100;
-}
+}2
 
 monitorButton_el.addEventListener('click', () => {
     if (!isMonitoring){
