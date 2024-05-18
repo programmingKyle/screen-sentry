@@ -20,6 +20,7 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: 300,
     height: 300,
+    maximizable: false,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -57,30 +58,17 @@ app.on('window-all-closed', () => {
   }
 });
 
-let maximized;
 ipcMain.handle('frame-handler', (req, data) => {
   if (!data || !data.request) return;
   switch(data.request){
     case 'Minimize':
       mainWindow.minimize();
       break;
-    case 'Maximize':
-      toggleMaximize();
-      break;
     case 'Exit':
       mainWindow.close();
       break;
     }
 });
-
-function toggleMaximize(){
-  if (maximized){
-    mainWindow.restore();
-  } else {
-    mainWindow.maximize();
-  }
-  maximized = !maximized;
-}
 
 
 //

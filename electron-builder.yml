@@ -1,0 +1,8 @@
+appId: com.squirrel.programmingKyle.screen-sentry
+productName: Screen Sentry
+win:
+  target: nsis
+  artifactName: "Screen-Sentry-Setup-${version}.${ext}"
+publish:
+  provider: github
+  repo: programmingKyle/screen-sentry
