@@ -17,13 +17,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function loadSettings(settings){
-    thresholdLabel_el.textContent = `Threshold: ${settings.inputSettings.threshold * 100}`;
+    thresholdLabel_el.textContent = `Threshold: ${settings.inputSettings.threshold * 100}%`;
     thresholdSlider_el.value = settings.inputSettings.threshold * 100;
+    volumeLabel_el.textContent = `Notification Volume: ${settings.inputSettings.volume * 100}%`;
     volumeSlider_el.value = settings.inputSettings.volume * 100;
 }
 
 thresholdSlider_el.addEventListener('input', () => {
     thresholdLabel_el.textContent = `Threshold: ${thresholdSlider_el.value}%`
+});
+
+volumeSlider_el.addEventListener('input', () => {
+    volumeLabel_el.textContent = `Notification Volume: ${volumeSlider_el.value}%`;
 });
 
 monitorButton_el.addEventListener('click', () => {
