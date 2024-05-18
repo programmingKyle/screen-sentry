@@ -137,7 +137,7 @@ ipcMain.handle('window-select-handler', (req, data) => {
       windowSelection(data.selection);
       break;
     case 'close':
-      mainWindow.webContents.send('set-monitoring', 'Close');
+      mainWindow.webContents.send('monitoring-handler', 'Close');
       closeWindowSelection();
       break;
     case 'stop':
@@ -150,7 +150,7 @@ let region;
 let monitorInterval;
 
 function windowSelection(selection){
-  mainWindow.webContents.send('set-monitoring', 'Monitoring');
+  mainWindow.webContents.send('monitoring-handler', 'Monitoring');
   selectionWindows.forEach(element => {
     element.close();
   });
@@ -216,6 +216,7 @@ function monitorScreen(region, display) {
         if (previousImg) {
           const mismatchedPixels = compareImages(previousImg, currentImg);
           if (mismatchedPixels > 0) {
+            mainWindow.webContents.send('monitoring-handler', 'Notify');
             console.log(`Change detected! ${mismatchedPixels} pixels changed.`);
           } else {
             console.log('No change detected.');

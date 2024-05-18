@@ -4,6 +4,8 @@ const monitorButtonText_el = document.getElementById('monitorButtonText');
 
 const controlDiv_el = document.getElementById('controlDiv');
 const thresholdSlider_el = document.getElementById('thresholdSlider');
+const volumeSlider_el = document.getElementById('volumeSlider');
+const notificationSound_el = document.getElementById('notificationSound');
 
 let isMonitoring = false;
 
@@ -34,11 +36,17 @@ monitorButton_el.addEventListener('mouseleave', () => {
 });
 
 
-api.setMonitoring((status) => {
-    if (status === 'Monitoring'){
-        toggleMonitoring();
-    } else if (status === 'Close'){
-        controlDiv_el.style.display = 'block';
+api.monitoringHandler((status) => {
+    switch (status){
+        case 'Monitoring':
+            toggleMonitoring();
+            break;
+        case 'Close':
+            controlDiv_el.style.display = 'block';
+            break;
+        case 'Notify':
+            notificationSound_el.play();
+            break;
     }
 });
 
