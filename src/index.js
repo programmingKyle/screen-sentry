@@ -304,3 +304,7 @@ function stopMonitoring(){
     clearInterval(monitorInterval);
   }
 }
+
+ipcMain.handle('input-handler', (req, data) => {
+
+});

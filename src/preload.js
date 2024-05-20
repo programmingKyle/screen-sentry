@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld('api', {
     frameHandler: (data) => ipcRenderer.invoke('frame-handler', data),
     windowSelectHandler: (data) => ipcRenderer.invoke('window-select-handler', data),
     getConfig: () => ipcRenderer.invoke('get-config'),
+    inputHandler: (data) => ipcRenderer.invoke('input-handler', data),
     
     monitoringHandler: (callback) => {
         ipcRenderer.on('monitoring-handler', (_, status) => {
