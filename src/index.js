@@ -60,6 +60,40 @@ const createWindow = () => {
   });
 };
 
+autoUpdater.on('checking-for-update', () => {
+  mainWindow.webContents.send('auto-updater-callback', 'Checking for Update');
+});
+
+autoUpdater.on('update-available', () => {
+  mainWindow.webContents.send('auto-updater-callback', 'Update Available');
+});
+
+autoUpdater.on('update-not-available', () => {
+  mainWindow.webContents.send('auto-updater-callback', 'No Updates Available');
+});
+
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('auto-updater-callback', 'Update Downloaded');
+});
+
+ipcMain.handle('restart-and-update', () => {
+  ensureSafeQuitAndInstall();
+});
+
+function ensureSafeQuitAndInstall() {
+  setImmediate(() => {
+    app.removeAllListeners("window-all-closed")
+    if (mainWindow != null) {
+      mainWindow.close()
+    }
+    autoUpdater.quitAndInstall(false)
+  })
+}
+
+ipcMain.handle('close-app', () => {
+  app.quit();
+});
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
