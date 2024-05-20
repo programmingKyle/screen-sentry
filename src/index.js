@@ -26,6 +26,8 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     width: width, 
     height: height,
+    minWidth: 300,
+    minHeight: 300,
     maximizable: false,
     x: x,
     y: y,
