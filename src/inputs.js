@@ -16,9 +16,8 @@ function loadSettings(settings){
     thresholdSlider_el.value = settings.inputSettings.threshold * 100;
     volumeLabel_el.textContent = `Notification Volume: ${settings.inputSettings.volume * 100}%`;
     volumeSlider_el.value = settings.inputSettings.volume * 100;
-
+    intervalInput_el.value = settings.inputSettings.interval;
     if (settings.inputSettings.onTop){
-        console.log('exists');
         alwaysOnTopCheckbox_el.checked = settings.inputSettings.onTop;
         api.inputHandler({input: 'onTop', value: settings.inputSettings.onTop});
     }

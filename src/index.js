@@ -320,7 +320,6 @@ function stopMonitoring(){
 }
 
 ipcMain.handle('input-handler', (req, data) => {
-  console.log(data);
   switch(data.input){
     case 'threshold':
       alterConfigHandler('inputSettings', 'threshold', data.value);
