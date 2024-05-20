@@ -198,8 +198,6 @@ ipcMain.handle('window-select-handler', (req, data) => {
   switch(data.request){
     case 'openSelection':
       detectionThreshold = data.threshold;
-      alterConfigHandler('inputSettings', 'threshold', data.threshold);
-      alterConfigHandler('inputSettings', 'volume', data.volume);
       createSelectionWindows();
       break;
     case 'select':
@@ -308,7 +306,9 @@ function stopMonitoring(){
 ipcMain.handle('input-handler', (req, data) => {
   switch(data.input){
     case 'threshold':
-      console.log('Threshold: ' + data.value);
+      alterConfigHandler('inputSettings', 'threshold', data.value);
       break;
   }
 });
+
+//alterConfigHandler('inputSettings', 'volume', data.volume);
