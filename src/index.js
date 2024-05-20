@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, screen, desktopCapturer, nativeImage } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const path = require('node:path');
 const appDataPath = app.getPath('userData');
 const Store = require('electron-store');
@@ -47,8 +48,16 @@ const createWindow = () => {
     frameMaximized = false;
   });
 
-  // Open the DevTools.
-  //mainWindow.webContents.openDevTools();
+  mainWindow.once('ready-to-show', () => {
+    if (app.isPackaged) {
+      autoUpdater.setFeedURL({
+        provider: 'github',
+        owner: 'programmingKyle',
+        repo: 'screen-sentry',
+      });
+      autoUpdater.checkForUpdatesAndNotify();
+    }
+  });
 };
 
 // This method will be called when Electron has finished
