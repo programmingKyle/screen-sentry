@@ -12,6 +12,7 @@ const pixelmatch = require('pixelmatch');
 let mainWindow;
 let selectionWindow;
 let detectionThreshold;
+let detectionInterval;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -309,7 +310,7 @@ function monitorScreen(region, display) {
       .catch(error => {
         console.error('Error capturing current screenshot:', error);
       });
-  }, 2000);
+  }, detectionInterval * 1000);
 }
 
 function stopMonitoring(){
@@ -330,6 +331,10 @@ ipcMain.handle('input-handler', (req, data) => {
     case 'onTop':
       mainWindow.setAlwaysOnTop(data.value);
       alterConfigHandler('inputSettings', 'onTop', data.value);
+      break;
+    case 'interval':
+      detectionInterval = data.value;
+      alterConfigHandler('inputSettings', 'interval', data.value);
       break;
   }
 });

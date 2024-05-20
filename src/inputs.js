@@ -4,6 +4,7 @@ const volumeLabel_el = document.getElementById('volumeLabel');
 const volumeSlider_el = document.getElementById('volumeSlider');
 const notificationSound_el = document.getElementById('notificationSound');
 const alwaysOnTopCheckbox_el = document.getElementById('alwaysOnTopCheckbox');
+const intervalInput_el = document.getElementById('intervalInput');
 
 document.addEventListener('DOMContentLoaded', async () => {
     const results = await api.getConfig();
@@ -41,4 +42,8 @@ volumeSlider_el.addEventListener('mouseup', () => {
 
 alwaysOnTopCheckbox_el.addEventListener('input', () => {
     api.inputHandler({input: 'onTop', value: alwaysOnTopCheckbox_el.checked});
+});
+
+intervalInput_el.addEventListener('input', () => {
+    api.inputHandler({input: 'interval', value: intervalInput_el.value});
 });
