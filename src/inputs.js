@@ -3,6 +3,7 @@ const thresholdSlider_el = document.getElementById('thresholdSlider');
 const volumeLabel_el = document.getElementById('volumeLabel');
 const volumeSlider_el = document.getElementById('volumeSlider');
 const notificationSound_el = document.getElementById('notificationSound');
+const alwaysOnTopCheckbox_el = document.getElementById('alwaysOnTopCheckbox');
 
 document.addEventListener('DOMContentLoaded', async () => {
     const results = await api.getConfig();
@@ -30,4 +31,8 @@ volumeSlider_el.addEventListener('input', () => {
 
 volumeSlider_el.addEventListener('mouseup', () => {
     api.inputHandler({input: 'volume', value: volumeSlider_el.value / 100});
+});
+
+alwaysOnTopCheckbox_el.addEventListener('input', () => {
+    api.inputHandler({input: 'onTop', volume: alwaysOnTopCheckbox_el.checked});
 });

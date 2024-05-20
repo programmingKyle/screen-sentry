@@ -60,6 +60,38 @@ const createWindow = () => {
   });
 };
 
+app.on('ready', () => {
+  checkConfigFile();
+});
+
+ipcMain.handle('close-app', () => {
+  app.quit();
+});
+
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.whenReady().then(() => {
+  createWindow();
+
+  // On OS X it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
+  });
+});
+
+// Quit when all windows are closed, except on macOS. There, it's common
+// for applications and their menu bar to stay active until the user quits
+// explicitly with Cmd + Q.
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
 autoUpdater.on('checking-for-update', () => {
   mainWindow.webContents.send('auto-updater-callback', 'Checking for Update');
 });
@@ -90,34 +122,6 @@ function ensureSafeQuitAndInstall() {
   })
 }
 
-ipcMain.handle('close-app', () => {
-  app.quit();
-});
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  createWindow();
-
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
-});
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
 ipcMain.handle('frame-handler', (req, data) => {
   if (!data || !data.request) return;
   switch(data.request){
@@ -129,6 +133,30 @@ ipcMain.handle('frame-handler', (req, data) => {
       break;
     }
 });
+
+function checkConfigFile() {
+  const configPath = store.path;
+  try {
+      fs.accessSync(configPath);
+      return;
+  } catch (err) {
+    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+    const defaultConfig = {
+      "inputSettings": {
+        "threshold": 0.5,
+        "volume": 0.5
+      },
+      "windowBounds": {
+        "width": 300,
+        "height": 300,
+        "x": Math.round((width - 300) / 2),
+        "y": Math.round((height - 300) / 2),
+        "isMaximized": false
+      }
+    };
+    store.set(defaultConfig); // Set the default config
+  }
+}
 
 
 //
@@ -179,19 +207,6 @@ ipcMain.handle('get-config', async () => {
   const converted = Object.assign({}, settings);
   return converted;
 });
-
-// Used for either adding or making edits to the config
-function alterConfigHandler(key, setting, value){
-  const config = store.get();
-  if (config){
-    const keyData = store.get(key, {});
-    keyData[setting] = value;
-    config[key] = keyData;
-    store.set(config);
-  } else {
-    store.set(key, { [setting]: value });
-  }
-}
 
 ipcMain.handle('window-select-handler', (req, data) => {
   if (!data || !data.request) return;
@@ -312,5 +327,21 @@ ipcMain.handle('input-handler', (req, data) => {
     case 'volume':
       alterConfigHandler('inputSettings', 'volume', data.value);
       break;
+    case 'onTop':
+      alterConfigHandler('inputSettings', 'onTop', data.value);
+      break;
   }
 });
+
+// Used for either adding or making edits to the config
+function alterConfigHandler(key, setting, value){
+  const config = store.get();
+  if (config){
+    const keyData = store.get(key, {});
+    keyData[setting] = value;
+    config[key] = keyData;
+    store.set(config);
+  } else {
+    store.set(key, { [setting]: value });
+  }
+}
