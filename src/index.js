@@ -328,6 +328,7 @@ ipcMain.handle('input-handler', (req, data) => {
       alterConfigHandler('inputSettings', 'volume', data.value);
       break;
     case 'onTop':
+      mainWindow.setAlwaysOnTop(data.value);
       alterConfigHandler('inputSettings', 'onTop', data.value);
       break;
   }
