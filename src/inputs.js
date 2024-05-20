@@ -21,7 +21,7 @@ thresholdSlider_el.addEventListener('input', () => {
 });
 
 thresholdSlider_el.addEventListener('mouseup', () => {
-    api.inputHandler({input: 'threshold', value: thresholdSlider_el.value});
+    api.inputHandler({input: 'threshold', value: thresholdSlider_el.value / 100});
 });
 
 volumeSlider_el.addEventListener('input', () => {
@@ -29,5 +29,5 @@ volumeSlider_el.addEventListener('input', () => {
 });
 
 volumeSlider_el.addEventListener('mouseup', () => {
-    api.inputHandler({input: 'volume', value: volumeSlider_el.value});
+    api.inputHandler({input: 'volume', value: volumeSlider_el.value / 100});
 });
