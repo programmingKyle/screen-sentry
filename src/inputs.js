@@ -34,5 +34,5 @@ volumeSlider_el.addEventListener('mouseup', () => {
 });
 
 alwaysOnTopCheckbox_el.addEventListener('input', () => {
-    api.inputHandler({input: 'onTop', volume: alwaysOnTopCheckbox_el.checked});
+    api.inputHandler({input: 'onTop', value: alwaysOnTopCheckbox_el.checked});
 });

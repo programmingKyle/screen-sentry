@@ -154,7 +154,7 @@ function checkConfigFile() {
         "isMaximized": false
       }
     };
-    store.set(defaultConfig); // Set the default config
+    store.set(defaultConfig);
   }
 }
 
@@ -333,13 +333,13 @@ ipcMain.handle('input-handler', (req, data) => {
   }
 });
 
-// Used for either adding or making edits to the config
 function alterConfigHandler(key, setting, value){
   const config = store.get();
   if (config){
-    const keyData = store.get(key, {});
-    keyData[setting] = value;
-    config[key] = keyData;
+    if (!config[key]) {
+      config[key] = {};
+    }
+    config[key][setting] = value;
     store.set(config);
   } else {
     store.set(key, { [setting]: value });
