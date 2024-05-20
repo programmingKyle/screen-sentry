@@ -306,5 +306,9 @@ function stopMonitoring(){
 }
 
 ipcMain.handle('input-handler', (req, data) => {
-
+  switch(data.input){
+    case 'threshold':
+      console.log('Threshold: ' + data.value);
+      break;
+  }
 });

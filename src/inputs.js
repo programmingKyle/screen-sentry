@@ -20,6 +20,14 @@ thresholdSlider_el.addEventListener('input', () => {
     thresholdLabel_el.textContent = `Threshold: ${thresholdSlider_el.value}%`
 });
 
+thresholdSlider_el.addEventListener('mouseup', () => {
+    api.inputHandler({input: 'threshold', value: thresholdSlider_el.value});
+});
+
 volumeSlider_el.addEventListener('input', () => {
     volumeLabel_el.textContent = `Notification Volume: ${volumeSlider_el.value}%`;
+});
+
+volumeSlider_el.addEventListener('mouseup', () => {
+    api.inputHandler({input: 'volume', value: volumeSlider_el.value});
 });
