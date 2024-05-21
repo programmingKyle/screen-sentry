@@ -1,7 +1,7 @@
 const monitorButton_el = document.getElementById('monitorButton');
 const monitorIcon_el = document.getElementById('monitorIcon');
 const monitorButtonText_el = document.getElementById('monitorButtonText');
-
+const pauseButton_el = document.getElementById('pauseButton');
 const controlDiv_el = document.getElementById('controlDiv');
 
 let isMonitoring = false;
@@ -9,6 +9,7 @@ let isMonitoring = false;
 monitorButton_el.addEventListener('click', () => {
     if (!isMonitoring){
         controlDiv_el.style.display = 'none';
+        pauseButton_el.style.display = 'block';
         api.windowSelectHandler({request: 'openSelection', threshold: `${thresholdSlider_el.value / 100}`, volume: volumeSlider_el.value / 100});
     } else {
         controlDiv_el.style.display = 'block';
@@ -52,10 +53,12 @@ function toggleMonitoring(){
         isMonitoring = true;
         monitorIcon_el.className = 'fas fa-x';
         monitorButtonText_el.textContent = 'Stop Monitoring';
+        pauseButton_el.style.display = 'block';
     } else {
         isMonitoring = false;
         api.windowSelectHandler({request: 'stop'});
         monitorIcon_el.className = 'fas fa-eye';
-        monitorButtonText_el.textContent = 'Start Monitoring';    
+        monitorButtonText_el.textContent = 'Start Monitoring';
+        pauseButton_el.style.display = 'none';   
     }
 }
