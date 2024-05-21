@@ -294,7 +294,7 @@ function compareImages(img1, img2) {
 
 function monitorScreen(region, display) {
   let previousImg = null;
-
+  
   monitorInterval = setInterval(() => {
     captureScreenshot(region, display)
       .then(currentImg => {
