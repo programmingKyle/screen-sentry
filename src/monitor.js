@@ -17,6 +17,11 @@ monitorButton_el.addEventListener('click', () => {
         pauseButton_el.style.display = 'block';
         api.windowSelectHandler({request: 'openSelection', threshold: `${thresholdSlider_el.value / 100}`, volume: volumeSlider_el.value / 100});
     } else {
+        if (isPaused){
+            isPaused = false;
+            pauseIcon_el.classList = 'fas fa-pause';
+            pauseText_el.textContent = 'Pause';    
+        }
         controlDiv_el.style.display = 'block';
         toggleMonitoring();
     }
@@ -41,7 +46,6 @@ monitorButton_el.addEventListener('mouseleave', () => {
 pauseButton_el.addEventListener('click', () => {
     api.inputHandler({input: 'pause'});
     isPaused = !isPaused;
-    console.log(isPaused);
     if (isPaused){
         pauseIcon_el.classList = 'fas fa-play';
         pauseText_el.textContent = 'Resume';
