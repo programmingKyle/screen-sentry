@@ -53,6 +53,7 @@ intervalInput_el.addEventListener('input', () => {
 
 let assigningPause;
 let numberOfKeys = 0;
+let lastKeyUp; // used to see if it should be removed from pressedKeys
 const pressedKeys = new Set();
 
 assignPauseHotkey_el.addEventListener('click', () => {
@@ -62,6 +63,10 @@ assignPauseHotkey_el.addEventListener('click', () => {
 
 document.addEventListener('keydown', (e) => {
     if (assigningPause){
+        if (lastKeyUp && pressedKeys.has(lastKeyUp)){
+            pressedKeys.delete(lastKeyUp);
+            lastKeyUp = null;
+        }
         if (!pressedKeys.has(e.key)){
             numberOfKeys++;
             pressedKeys.add(e.key);
@@ -70,9 +75,10 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-document.addEventListener('keyup', () => {
+document.addEventListener('keyup', (e) => {
     if (assigningPause){
         numberOfKeys--;
+        lastKeyUp = e.key;
     }
 
     if (numberOfKeys === 0 && assigningPause){
