@@ -6,6 +6,9 @@ const notificationSound_el = document.getElementById('notificationSound');
 const alwaysOnTopCheckbox_el = document.getElementById('alwaysOnTopCheckbox');
 const intervalInput_el = document.getElementById('intervalInput');
 
+const pauseHotkeyText_el = document.getElementById('pauseHotkeyText');
+const assignPauseHotkey_el = document.getElementById('assignPauseHotkey');
+
 document.addEventListener('DOMContentLoaded', async () => {
     const results = await api.getConfig();
     loadSettings(results);
@@ -46,4 +49,11 @@ alwaysOnTopCheckbox_el.addEventListener('input', () => {
 
 intervalInput_el.addEventListener('input', () => {
     api.inputHandler({input: 'interval', value: intervalInput_el.value});
+});
+
+
+
+assignPauseHotkey_el.addEventListener('click', () => {
+    console.log('Time to assign a hotkey');
+    
 });

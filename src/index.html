@@ -30,7 +30,11 @@
             <h4 id="pauseIcon" class="fas fa-pause"></h4>
             <h5 id="pauseText">Pause</h5>
           </div>
-          <div id="controlDiv">
+          <div id="controlDiv" style="display: grid; grid-template-rows: auto; grid-gap: 2px;">
+            <div style="display: grid; grid-template-columns: 1fr auto;">
+              <h5 id="pauseHotkeyText" style="text-align: left;">Pause Hotkey:</h5>
+              <button id="assignPauseHotkey">Assign Hotkey</button>
+            </div>
             <div style="display: flex; flex-direction: column;">
               <h5 id="thresholdLabel">Threshold</h5>
               <input id="thresholdSlider" type="range" min="0" max="100" value="50">
