@@ -51,9 +51,32 @@ intervalInput_el.addEventListener('input', () => {
     api.inputHandler({input: 'interval', value: intervalInput_el.value});
 });
 
-
+let assigningPause;
+let numberOfKeys = 0;
+const pressedKeys = new Set();
 
 assignPauseHotkey_el.addEventListener('click', () => {
     console.log('Time to assign a hotkey');
-    
+    assigningPause = true;
+});
+
+document.addEventListener('keydown', (e) => {
+    if (assigningPause){
+        if (!pressedKeys.has(e.key)){
+            numberOfKeys++;
+            pressedKeys.add(e.key);
+            console.log(pressedKeys);    
+        }
+    }
+});
+
+document.addEventListener('keyup', () => {
+    if (assigningPause){
+        numberOfKeys--;
+    }
+
+    if (numberOfKeys === 0 && assigningPause){
+        assigningPause = false;
+        console.log(`Hotkey is: ${pressedKeys}`);
+    }
 });
