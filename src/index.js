@@ -294,8 +294,8 @@ function compareImages(img1, img2) {
 
 function monitorScreen(region, display) {
   let previousImg = null;
-  
-  monitorInterval = setInterval(() => {
+
+  const compareHandler = () => {
     captureScreenshot(region, display)
       .then(currentImg => {
         if (previousImg) {
@@ -312,7 +312,11 @@ function monitorScreen(region, display) {
       .catch(error => {
         console.error('Error capturing current screenshot:', error);
       });
-  }, detectionInterval * 1000);
+  }
+
+  compareHandler();
+
+  monitorInterval = setInterval(compareHandler, detectionInterval * 1000);
 }
 
 function stopMonitoring(){
@@ -334,6 +338,7 @@ ipcMain.handle('input-handler', (req, data) => {
       alterConfigHandler('inputSettings', 'onTop', data.value);
       break;
     case 'interval':
+      console.log(data.value);
       detectionInterval = data.value;
       alterConfigHandler('inputSettings', 'interval', data.value);
       break;
