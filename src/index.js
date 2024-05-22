@@ -13,6 +13,7 @@ let mainWindow;
 let selectionWindow;
 let detectionThreshold;
 let detectionInterval;
+let isPaused;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -219,6 +220,7 @@ ipcMain.handle('window-select-handler', (req, data) => {
       createSelectionWindows();
       break;
     case 'select':
+      selection = data.selection;
       windowSelection(data.selection);
       break;
     case 'close':
@@ -232,6 +234,7 @@ ipcMain.handle('window-select-handler', (req, data) => {
 });
 
 let region;
+let selectedDisplay;
 let monitorInterval;
 
 function windowSelection(selection){
@@ -242,7 +245,7 @@ function windowSelection(selection){
   selectionWindows.length = 0;
   region = selection;
 
-  const selectedDisplay = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
+  selectedDisplay = screen.getDisplayNearestPoint(screen.getCursorScreenPoint());
   monitorScreen(region, selectedDisplay);
 }
 
@@ -338,12 +341,23 @@ ipcMain.handle('input-handler', (req, data) => {
       alterConfigHandler('inputSettings', 'onTop', data.value);
       break;
     case 'interval':
-      console.log(data.value);
       detectionInterval = data.value;
       alterConfigHandler('inputSettings', 'interval', data.value);
       break;
+    case 'pause':
+      togglePause();
+      break;
   }
 });
+
+function togglePause(){
+  if (monitorInterval){
+    clearInterval(monitorInterval);
+    monitorInterval = null;
+  } else {
+    monitorScreen(region, selectedDisplay);
+  }
+}
 
 function alterConfigHandler(key, setting, value){
   const config = store.get();

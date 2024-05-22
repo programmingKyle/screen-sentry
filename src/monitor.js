@@ -1,10 +1,15 @@
 const monitorButton_el = document.getElementById('monitorButton');
 const monitorIcon_el = document.getElementById('monitorIcon');
 const monitorButtonText_el = document.getElementById('monitorButtonText');
+
 const pauseButton_el = document.getElementById('pauseButton');
+const pauseIcon_el = document.getElementById('pauseIcon');
+const pauseText_el = document.getElementById('pauseText');
+
 const controlDiv_el = document.getElementById('controlDiv');
 
 let isMonitoring = false;
+let isPaused = false;
 
 monitorButton_el.addEventListener('click', () => {
     if (!isMonitoring){
@@ -30,6 +35,19 @@ monitorButton_el.addEventListener('mouseleave', () => {
         monitorButton_el.style.backgroundColor = '#1B1B1B';
     } else {
         monitorButton_el.style.backgroundColor = 'green';
+    }
+});
+
+pauseButton_el.addEventListener('click', () => {
+    api.inputHandler({input: 'pause'});
+    isPaused = !isPaused;
+    console.log(isPaused);
+    if (isPaused){
+        pauseIcon_el.classList = 'fas fa-play';
+        pauseText_el.textContent = 'Resume';
+    } else {
+        pauseIcon_el.classList = 'fas fa-pause';
+        pauseText_el.textContent = 'Pause';
     }
 });
 
