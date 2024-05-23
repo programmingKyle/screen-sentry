@@ -371,3 +371,18 @@ function alterConfigHandler(key, setting, value){
     store.set(key, { [setting]: value });
   }
 }
+
+/*
+ipcMain.handle('hotkey-handler', (req, data) => {
+  console.log(data);
+  if (!data || !data.request) return;
+  switch (data.request){
+    case 'set':
+      console.log('set');
+      console.log(data.keys);
+      break;
+    case 'get':
+      break;
+  }
+});
+*/

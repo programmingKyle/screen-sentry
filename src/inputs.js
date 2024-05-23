@@ -8,6 +8,8 @@ const intervalInput_el = document.getElementById('intervalInput');
 
 const pauseHotkeyText_el = document.getElementById('pauseHotkeyText');
 const assignPauseHotkey_el = document.getElementById('assignPauseHotkey');
+const confirmPauseHotkeyButton_el = document.getElementById('confirmPauseHotkeyButton');
+const cancelHotkeyButton_el = document.getElementById('cancelHotkeyButton');
 
 document.addEventListener('DOMContentLoaded', async () => {
     const results = await api.getConfig();
@@ -60,6 +62,10 @@ const pressedKeys = new Set();
 assignPauseHotkey_el.addEventListener('click', () => {
     console.log('Time to assign a hotkey');
     assigningPause = true;
+
+    assignPauseHotkey_el.style.display = 'none';
+    confirmPauseHotkeyButton_el.style.display = 'grid';
+    cancelHotkeyButton_el.style.display = 'grid';
 });
 
 document.addEventListener('keydown', (e) => {
@@ -85,7 +91,7 @@ document.addEventListener('keyup', (e) => {
 
     if (numberOfKeys === 0 && assigningPause){
         assigningPause = false;
-        console.log(numberOfKeys);
         console.log(`Hotkey is: ${pressedKeys}`);
+        api.hotkeyHandler({request: 'set', keys: pressedKeys});
     }
 });

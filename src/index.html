@@ -33,7 +33,11 @@
           <div id="controlDiv" style="display: grid; grid-template-rows: auto; grid-gap: 2px;">
             <div style="display: grid; grid-template-columns: 1fr auto;">
               <h5 id="pauseHotkeyText" style="text-align: left;">Pause Hotkey:</h5>
-              <button id="assignPauseHotkey">Assign Hotkey</button>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 2px;">
+                <button id="assignPauseHotkey" style="grid-column: span 2;">Assign Hotkey</button>
+                <button id="confirmPauseHotkeyButton" style="display: none;">Confirm</button>
+                <button id="cancelHotkeyButton" style="display: none;">Cancel</button>
+              </div>
             </div>
             <div style="display: flex; flex-direction: column;">
               <h5 id="thresholdLabel">Threshold</h5>

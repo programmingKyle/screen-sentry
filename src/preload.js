@@ -5,6 +5,7 @@ contextBridge.exposeInMainWorld('api', {
     windowSelectHandler: (data) => ipcRenderer.invoke('window-select-handler', data),
     getConfig: () => ipcRenderer.invoke('get-config'),
     inputHandler: (data) => ipcRenderer.invoke('input-handler', data),
+    hotkeyHandler: (data) => ipcRenderer.invoke('hotkey-handler', data),
     
     monitoringHandler: (callback) => {
         ipcRenderer.on('monitoring-handler', (_, status) => {
