@@ -62,6 +62,7 @@ api.monitoringHandler((status) => {
             break;
         case 'Close':
             controlDiv_el.style.display = 'block';
+            pauseButton_el.style.display = 'none';
             break;
         case 'Notify':
             notificationSound_el.volume = volumeSlider_el.value / 100;
