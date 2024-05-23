@@ -78,7 +78,7 @@ document.addEventListener('keydown', (e) => {
         if (!pressedKeys.has(e.key)){
             numberOfKeys++;
             pressedKeys.add(e.key);
-            console.log(pressedKeys);    
+            pauseHotkeyText_el.textContent = Array.from(pressedKeys).join(', ');
         }
     }
 });
@@ -92,6 +92,6 @@ document.addEventListener('keyup', (e) => {
     if (numberOfKeys === 0 && assigningPause){
         assigningPause = false;
         console.log(`Hotkey is: ${pressedKeys}`);
-        api.hotkeyHandler({request: 'set', keys: pressedKeys});
+        //api.hotkeyHandler({request: 'set', keys: pressedKeys});
     }
 });
