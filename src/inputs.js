@@ -70,7 +70,12 @@ assignPauseHotkey_el.addEventListener('click', () => {
 
 document.addEventListener('keydown', (e) => {
     if (assigningPause && lastKeyDown !== e.key){
+        console.log(e.key);
+        e.preventDefault();
         lastKeyDown = e.key;
+        if (numberOfKeys === 0 && pressedKeys && assigningPause){
+            pressedKeys.clear();
+        }
         if (lastKeyUp && pressedKeys.has(lastKeyUp)){
             pressedKeys.delete(lastKeyUp);
             lastKeyUp = null;
@@ -78,7 +83,7 @@ document.addEventListener('keydown', (e) => {
         if (!pressedKeys.has(e.key)){
             numberOfKeys++;
             pressedKeys.add(e.key);
-            pauseHotkeyText_el.textContent = Array.from(pressedKeys).join(', ');
+            pauseHotkeyText_el.textContent = Array.from(pressedKeys).join(' + ');
         }
     }
 });
@@ -90,7 +95,9 @@ document.addEventListener('keyup', (e) => {
     }
 
     if (numberOfKeys === 0 && assigningPause){
-        assigningPause = false;
+        lastKeyDown = null;
+        lastKeyUp = null;
+        //assigningPause = false;
         console.log(`Hotkey is: ${pressedKeys}`);
         //api.hotkeyHandler({request: 'set', keys: pressedKeys});
     }
