@@ -102,3 +102,10 @@ document.addEventListener('keyup', (e) => {
         //api.hotkeyHandler({request: 'set', keys: pressedKeys});
     }
 });
+
+cancelHotkeyButton_el.addEventListener('click', () => {
+    assigningPause = false;
+    assignPauseHotkey_el.style.display = 'grid';
+    confirmPauseHotkeyButton_el.style.display = 'none';
+    cancelHotkeyButton_el.style.display = 'none';
+});
