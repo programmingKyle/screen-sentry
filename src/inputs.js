@@ -11,22 +11,29 @@ const assignPauseHotkey_el = document.getElementById('assignPauseHotkey');
 const confirmPauseHotkeyButton_el = document.getElementById('confirmPauseHotkeyButton');
 const cancelHotkeyButton_el = document.getElementById('cancelHotkeyButton');
 
+let settings;
+
 document.addEventListener('DOMContentLoaded', async () => {
-    const results = await api.getConfig();
-    loadSettings(results);
+    settings = await api.getConfig();
+    loadSettings();
 });
 
-function loadSettings(settings){
+function loadSettings(){
     thresholdLabel_el.textContent = `Threshold: ${settings.inputSettings.threshold * 100}%`;
     thresholdSlider_el.value = settings.inputSettings.threshold * 100;
     volumeLabel_el.textContent = `Notification Volume: ${settings.inputSettings.volume * 100}%`;
     volumeSlider_el.value = settings.inputSettings.volume * 100;
     intervalInput_el.value = settings.inputSettings.interval;
+    populateHotkeyText(settings.inputSettings.pauseHotkey);
     api.inputHandler({input: 'interval', value: settings.inputSettings.interval});
     if (settings.inputSettings.onTop){
         alwaysOnTopCheckbox_el.checked = settings.inputSettings.onTop;
         api.inputHandler({input: 'onTop', value: settings.inputSettings.onTop});
     }
+}
+
+function populateHotkeyText(hotkey){
+    pauseHotkeyText_el.textContent = `Pause Hotkey: ${hotkey.replace(', ', ' + ')}`;
 }
 
 thresholdSlider_el.addEventListener('input', () => {
@@ -83,7 +90,7 @@ document.addEventListener('keydown', (e) => {
         if (!pressedKeys.has(e.key)){
             numberOfKeys++;
             pressedKeys.add(e.key);
-            pauseHotkeyText_el.textContent = Array.from(pressedKeys).join(' + ');
+            pauseHotkeyText_el.textContent = `Pause Hotkey: ${Array.from(pressedKeys).join(' + ')}`;
         }
     }
 });
@@ -98,7 +105,6 @@ document.addEventListener('keyup', (e) => {
         lastKeyDown = null;
         lastKeyUp = null;
         //assigningPause = false;
-        console.log(`Hotkey is: ${pressedKeys}`);
         //api.hotkeyHandler({request: 'set', keys: pressedKeys});
     }
 });
@@ -108,4 +114,13 @@ cancelHotkeyButton_el.addEventListener('click', () => {
     assignPauseHotkey_el.style.display = 'grid';
     confirmPauseHotkeyButton_el.style.display = 'none';
     cancelHotkeyButton_el.style.display = 'none';
+    populateHotkeyText(settings.inputSettings.pauseHotkey);
+});
+
+confirmPauseHotkeyButton_el.addEventListener('click', () => {
+    assigningPause = false;
+    assignPauseHotkey_el.style.display = 'grid';
+    confirmPauseHotkeyButton_el.style.display = 'none';
+    cancelHotkeyButton_el.style.display = 'none';
+    api.hotkeyHandler({request: 'set', keys: Array.from(pressedKeys).join(', ')});
 });

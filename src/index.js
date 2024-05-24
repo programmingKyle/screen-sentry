@@ -372,17 +372,13 @@ function alterConfigHandler(key, setting, value){
   }
 }
 
-/*
 ipcMain.handle('hotkey-handler', (req, data) => {
-  console.log(data);
   if (!data || !data.request) return;
   switch (data.request){
     case 'set':
-      console.log('set');
-      console.log(data.keys);
+      alterConfigHandler('inputSettings', 'pauseHotkey', data.keys);
       break;
     case 'get':
       break;
   }
 });
-*/
